@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog - Streamlit ML Upload App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to right, #e0f7fa, #fdfcdc);
+      color: #333;
+      padding-bottom: 100px;
+    }
+    html { scroll-behavior: smooth; }
+    nav {
+      background: #4f46e5;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    nav ul {
+      display: flex;
+      justify-content: center;
+      padding: 15px;
+      gap: 25px;
+      list-style: none;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover { color: #ffd700; }
+    header {
+      background: linear-gradient(to right, #a78bfa, #c084fc);
+      padding: 50px 20px;
+      text-align: center;
+      color: white;
+    }
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #4f46e5;
+      margin-top: 40px;
+    }
+    ul li { margin-bottom: 10px; }
+    a.button {
+      display: inline-block;
+      background-color: #4f46e5;
+      color: white;
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 8px;
+      margin-top: 15px;
+      margin-bottom: 20px;
+      transition: background-color 0.3s ease;
+    }
+    a.button:hover { background-color: #4338ca; }
+    .quote {
+      background: linear-gradient(135deg, #fcd34d, #fef08a);
+      color: #3b3b3b;
+      padding: 20px;
+      margin: 30px 0;
+      font-style: italic;
+      border-left: 6px solid #f59e0b;
+      border-radius: 8px;
+    }
+    .code-block {
+      background: #1f2937;
+      color: #f8f8f2;
+      padding: 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-family: monospace;
+    }
+    footer {
+      background: #4f46e5;
+      color: white;
+      text-align: center;
+      padding: 25px;
+      font-size: 14px;
+      position: relative;
+    }
+    footer i {
+      margin: 0 5px;
+      color: #ffd700;
+    }
+    @media (max-width: 600px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+      header h1 { font-size: 1.8rem; }
+      a.button {
+        width: 100%;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <ul>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#why">Why</a></li>
+      <li><a href="#exp">Explanation</a></li>
+      <li><a href="#code">Code</a></li>
+      <li><a href="#demo">Demo</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul> 
+  </nav>
+
+  <header>
+    <h1>🌟 Streamlit ML App: Upload + Predict</h1>
+    <p>CSV, Images & Machine Learning — All in One Simple App</p>
+  </header>
+
+  <div class="container">
+    <h2 id="intro">📘 Introduction</h2>
+    <p>This app allows you to upload <strong>images</strong> and <strong>CSV files</strong>, and also lets you make <strong>machine learning predictions</strong> using the Iris dataset. Built with <strong>Streamlit</strong> and Python.</p>
+
+    <h2 id="why">💡 Why Build This?</h2>
+    <ul>
+      <li>📷 Upload and preview image files instantly</li>
+      <li>📄 Upload and preview tabular CSV data</li>
+      <li>🌸 Predict Iris species using ML sliders</li>
+    </ul>
+
+    <div class="quote">
+      “Technology is best when it brings people together — and tools like Streamlit make it effortless.”
+    </div>
+
+    <h2 id="exp">🔍 Tools Used</h2>
+    <ul>
+      <li><strong>Streamlit</strong>: For web UI</li>
+      <li><strong>Pandas</strong>: For CSV reading</li>
+      <li><strong>Pillow</strong>: For image handling</li>
+      <li><strong>scikit-learn</strong>: For machine learning model</li>
+    </ul>
+
+    <h2 id="code">💻 Python App Code</h2>
+    <div class="code-block">
+<pre><code>import streamlit as st
+import pandas as pd
+from PIL import Image
+from sklearn.datasets import load_iris
+from sklearn.ensemble import RandomForestClassifier
+
+st.set_page_config(page_title="Streamlit Demo", layout="centered")
+st.title("🌟 Streamlit App: Upload Files + ML Prediction")
+
+st.sidebar.header("Choose Action")
+option = st.sidebar.radio("Select a section:", ["📷 Upload Image", "📄 Upload CSV", "🤖 Predict Iris Species"])
+
+if option == "📷 Upload Image":
+    st.subheader("Upload an Image")
+    image_file = st.file_uploader("Choose an image file", type=["jpg", "png", "jpeg"])
+    if image_file:
+        img = Image.open(image_file)
+        st.image(img, caption="Uploaded Image", use_column_width=True)
+
+elif option == "📄 Upload CSV":
+    st.subheader("Upload a CSV File")
+    csv_file = st.file_uploader("Choose a CSV file", type="csv")
+    if csv_file:
+        df = pd.read_csv(csv_file)
+        st.write("CSV Preview:")
+        st.dataframe(df.head())
+
+elif option == "🤖 Predict Iris Species":
+    st.subheader("ML Prediction: Iris Flower")
+    iris = load_iris()
+    X = iris.data
+    y = iris.target
+    model = RandomForestClassifier()
+    model.fit(X, y)
+
+    sl = st.slider("Sepal Length (cm)", 4.0, 8.0, 5.1)
+    sw = st.slider("Sepal Width (cm)", 2.0, 4.5, 3.5)
+    pl = st.slider("Petal Length (cm)", 1.0, 7.0, 1.4)
+    pw = st.slider("Petal Width (cm)", 0.1, 2.5, 0.2)
+
+    input_data = [[sl, sw, pl, pw]]
+    prediction = model.predict(input_data)[0]
+    predicted_species = iris.target_names[prediction]
+
+    st.success(f"🌼 Predicted Iris Species: {predicted_species.capitalize()}")
+</code></pre>
+    </div>
+
+    <h2 id="demo">🌐 Live Demo</h2>
+    <a class="button" href="https://anjali-ksh-streamlit-app-app-cz6a08.streamlit.app/" target="_blank">
+      🚀 Try the Live Streamlit App
+    </a>
+
+    <h2 id="contact">📬 Contact</h2>
+    <p>Let’s connect or collaborate on cool projects!</p>
+    
+
+  <footer>
+    <p>Crafted with <i class="fa-solid fa-heart"></i> by <strong>Anjali Kshetrimayum</strong> • &copy; <span id="year"></span></p>
+    <p>Powered by HTML <i class="fa-brands fa-html5"></i> + Python <i class="fa-brands fa-python"></i></p>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
